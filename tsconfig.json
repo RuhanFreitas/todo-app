@@ -1,18 +1,21 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",                                  
-    "module": "NodeNext",                                
-    "moduleResolution": "NodeNext",                     
-    "rootDir": "./src",                                  
-    "outDir": "./dist",                                 
-    "strict": true,                                      
-    "noImplicitAny": true,                              
-    "esModuleInterop": true,                             
-    "skipLibCheck": true,                                
-    "forceConsistentCasingInFileNames": true,            
-    "removeComments": true,                              
-    "sourceMap": true                                  
-  },
-  "include": ["src/**/*"],                              
-  "exclude": ["node_modules", "**/*.spec.ts"]            
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "allowJs": true,
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "strict": true,
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "allowImportingTsExtensions": true,
+        "noEmit": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
 }
