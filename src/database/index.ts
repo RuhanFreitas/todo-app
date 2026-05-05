@@ -16,25 +16,24 @@ try {
     await pool.query(`
     CREATE TABLE IF NOT EXISTS users(
         id SERIAL PRIMARY KEY,
-        name VARCHAR(80),
-        email VARCHAR(80),
-        password VARCHAR(50),
+        name VARCHAR(80) NOT NULL,
+        email VARCHAR(80) NOT NULL UNIQUE,
+        password VARCHAR(50) NOT NULL,
         created_at TIMESTAMPTZ default CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ default CURRENT_TIMESTAMP
-    );    
+    )  
 `)
 
     await pool.query(`
     CREATE TABLE IF NOT EXISTS tasks(
         id SERIAL PRIMARY KEY,
         user_id INT REFERENCES users(id),
-        title VARCHAR(80),
-        description TEXT,
+        title VARCHAR(80) NOT NULL,
+        description TEXT NOT NULL,
         created_at TIMESTAMPTZ default CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ default CURRENT_TIMESTAMP
-    );    
+    )
 `)
-
     console.log('Tables create successfully')
 } catch (error) {
     console.error(error)
