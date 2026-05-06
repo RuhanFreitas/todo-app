@@ -2,7 +2,7 @@ import z from 'zod'
 
 export const IdUserSchema = z.object({
     body: z.object({
-        id: z.string(),
+        id: z.coerce.number().int().positive(),
     }),
 })
 

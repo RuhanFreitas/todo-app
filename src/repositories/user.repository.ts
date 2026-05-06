@@ -1,25 +1,26 @@
 import pool from '../database/index.ts'
-import { CreateUser } from '../schemas/create-user.schema.ts'
-import { IdUser } from '../schemas/id-user.schema.ts'
-import { UpdateUser } from '../schemas/update-user.schema.ts'
+import { CreateUser } from '../schemas/user/create-user.schema.ts'
+import { IdUser } from '../schemas/user/id-user.schema.ts'
+import { UpdateUser } from '../schemas/user/update-user.schema.ts'
 
 class UserRepository {
     constructor(private readonly db = pool) {}
 
     async create(createUser: CreateUser) {
-        const response = await this.db.query(
-            'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *',
-            [createUser.name, createUser.email, createUser.password],
-        )
+        const query =
+            'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *'
+        const clauses = [createUser.name, createUser.email, createUser.password]
+
+        const response = await this.db.query(query, clauses)
 
         return response.rows[0]
     }
 
     async findById(id: IdUser) {
-        const response = await this.db.query(
-            'SELECT * FROM users WHERE id = $1',
-            [id],
-        )
+        const query = 'SELECT * FROM users where id = $1'
+        const clause = [id]
+
+        const response = await this.db.query(query, clause)
 
         if (response.rows[0] == null) {
             return 'User not found'
@@ -29,42 +30,33 @@ class UserRepository {
     }
 
     async updateById(updateUser: UpdateUser) {
-        const { id, ...fields } = updateUser
-
-        const keys = Object.keys(fields)
-        if (keys.length === 0) return
-
-        const setClause = keys
-            .map((key, index) => `"${key}" = $${index + 1}`)
-            .join(', ')
-
-        const values = Object.values(fields)
-
-        values.push(id)
-
-        const idPosition = values.length
-
         const query = `
-                UPDATE users 
-                SET ${setClause} 
-                WHERE id = $${idPosition}
-                RETURNING *;
-            `
+            UPDATE users SET
+                name = COALESCE($1, name),
+                email = COALESCE($2, email),
+                password = COLAESCE($2, password) 
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = $3
+            RETURNING *
+        `
 
-        const response = await this.db.query(query, values)
+        const clauses = [
+            updateUser.name,
+            updateUser.email,
+            updateUser.password,
+            updateUser.id,
+        ]
 
-        if (response.rows[0] == null) {
-            return 'You can not update an unexisting user'
-        }
+        const response = await this.db.query(query, clauses)
 
         return response.rows[0]
     }
 
     async delete(id: IdUser) {
-        const response = await this.db.query(
-            'DELETE FROM users WHERE id = $1',
-            [id],
-        )
+        const query = 'DELETE FROM users WHERE id = $1'
+        const clause = [id]
+
+        const response = await this.db.query(query, clause)
 
         return response
     }

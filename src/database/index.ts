@@ -8,12 +8,22 @@ const pool = new Pool({
     database: process.env.DB_NAME,
     max: 10,
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    connectionTimeoutMillis: 10000,
     maxLifetimeSeconds: 60,
 })
 
-try {
-    await pool.query(`
+export const connectDB = async () => {
+    try {
+        await pool.query(`
+        DO $$ 
+        BEGIN
+          IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_status') THEN
+            CREATE TYPE task_status AS ENUM ('PENDING', 'COMPLETED', 'ONGOING');
+          END IF;
+        END $$;
+    `)
+
+        await pool.query(`
     CREATE TABLE IF NOT EXISTS users(
         id SERIAL PRIMARY KEY,
         name VARCHAR(80) NOT NULL,
@@ -24,23 +34,25 @@ try {
     )  
 `)
 
-    await pool.query(`
+        await pool.query(`
     CREATE TABLE IF NOT EXISTS tasks(
         id SERIAL PRIMARY KEY,
         user_id INT REFERENCES users(id),
         title VARCHAR(80) NOT NULL,
         description TEXT NOT NULL,
+        status task_status DEFAULT 'PENDING',
         created_at TIMESTAMPTZ default CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ default CURRENT_TIMESTAMP
     )
 `)
-    console.log('Tables create successfully')
-} catch (error) {
-    console.error(error)
-}
+        console.log('Tables create successfully')
+    } catch (error) {
+        console.error(error)
+    }
 
-pool.on('error', (e) => {
-    console.error('Ops... Something is wrong ', e)
-})
+    pool.on('error', (e) => {
+        console.error('Ops... Something is wrong ', e)
+    })
+}
 
 export default pool

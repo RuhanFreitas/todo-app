@@ -1,10 +1,14 @@
-import 'dotenv/config'
 import './database/index.ts'
+import 'dotenv/config'
 import 'reflect-metadata'
 
 import express from 'express'
 import userRouter from './routes/user.routes.ts'
 import taskRouter from './routes/task.routes.ts'
+
+import { connectDB } from './database/index.ts'
+
+await connectDB()
 
 const app = express()
 

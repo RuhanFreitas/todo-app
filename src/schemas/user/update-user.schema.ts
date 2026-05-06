@@ -2,7 +2,7 @@ import z from 'zod'
 
 export const UpdateUserSchema = z.object({
     body: z.object({
-        id: z.string(),
+        id: z.coerce.number().int().positive(),
         name: z
             .string()
             .min(3, 'Name must have 3 characters or more')
