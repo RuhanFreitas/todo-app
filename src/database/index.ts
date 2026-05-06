@@ -28,7 +28,7 @@ export const connectDB = async () => {
         id SERIAL PRIMARY KEY,
         name VARCHAR(80) NOT NULL,
         email VARCHAR(80) NOT NULL UNIQUE,
-        password VARCHAR(50) NOT NULL,
+        password TEXT NOT NULL,
         created_at TIMESTAMPTZ default CURRENT_TIMESTAMP,
         updated_at TIMESTAMPTZ default CURRENT_TIMESTAMP
     )  

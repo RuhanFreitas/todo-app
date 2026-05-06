@@ -1,14 +1,11 @@
 import { Router } from 'express'
 import { userController } from '../controllers/user.controller.ts'
 import { validate } from '../middlewares/validate.middleware.ts'
-import { CreateUserSchema } from '../schemas/user/create-user.schema.ts'
+import { CreateUserSchema } from '../schemas/auth/register-user.schema.ts'
 import { UpdateUserSchema } from '../schemas/user/update-user.schema.ts'
 import { IdUserSchema } from '../schemas/user/id-user.schema.ts'
 
 const userRouter = Router()
-
-// Create user
-userRouter.post('/', validate(CreateUserSchema), (req, res) => userController.create(req, res))
 
 // Find user by id
 userRouter.get('/', validate(IdUserSchema), (req, res) => userController.findById(req, res))

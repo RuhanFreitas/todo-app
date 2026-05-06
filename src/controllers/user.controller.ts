@@ -4,12 +4,6 @@ import { userService } from '../services/user.service.ts'
 class UserController {
     constructor(private readonly service = userService) {}
 
-    async create(req: Request, res: Response) {
-        const response = await this.service.create(req.body)
-
-        res.status(201).json(response)
-    }
-
     async findById(req: Request, res: Response) {
         const response = await this.service.findById(req.body.id)
 

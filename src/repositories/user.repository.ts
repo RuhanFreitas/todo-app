@@ -1,15 +1,19 @@
 import pool from '../database/index.ts'
-import { CreateUser } from '../schemas/user/create-user.schema.ts'
+import { RegisterUser } from '../schemas/auth/register-user.schema.ts'
 import { IdUser } from '../schemas/user/id-user.schema.ts'
 import { UpdateUser } from '../schemas/user/update-user.schema.ts'
 
 class UserRepository {
     constructor(private readonly db = pool) {}
 
-    async create(createUser: CreateUser) {
+    async create(registerUser: RegisterUser) {
         const query =
             'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *'
-        const clauses = [createUser.name, createUser.email, createUser.password]
+        const clauses = [
+            registerUser.name,
+            registerUser.email,
+            registerUser.password,
+        ]
 
         const response = await this.db.query(query, clauses)
 
@@ -17,7 +21,7 @@ class UserRepository {
     }
 
     async findById(id: IdUser) {
-        const query = 'SELECT * FROM users where id = $1'
+        const query = 'SELECT * FROM users WHERE id = $1'
         const clause = [id]
 
         const response = await this.db.query(query, clause)
@@ -25,6 +29,15 @@ class UserRepository {
         if (response.rows[0] == null) {
             return 'User not found'
         }
+
+        return response.rows[0]
+    }
+
+    async findByEmail(email: string) {
+        const query = 'SELECT * FROM users WHERE email = $1'
+        const clause = [email]
+
+        const response = await this.db.query(query, clause)
 
         return response.rows[0]
     }
