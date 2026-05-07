@@ -20,10 +20,6 @@ class AuthController {
     async login(req: Request, res: Response) {
         const response = await this.service.login(req.body)
 
-        if (!response.token) {
-            res.status(401).json({ message: 'Oops... something went wrong' })
-        }
-
         const { token, user } = response
 
         res.cookie('token', token, {

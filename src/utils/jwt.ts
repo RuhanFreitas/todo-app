@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import jwt from 'jsonwebtoken'
+import { AppError } from '../errors/AppError.ts'
 
 class JwtService {
     private readonly SECRET: string | any
@@ -8,8 +9,9 @@ class JwtService {
         this.SECRET = process.env.SECRET
 
         if (!this.SECRET) {
-            throw new Error(
-                'Oops... Important values are missing from the secret keys...',
+            throw new AppError(
+                'Some important key is missing from the production environment...',
+                500,
             )
         }
     }

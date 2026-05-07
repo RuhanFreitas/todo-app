@@ -4,6 +4,7 @@ import { bcryptHash } from '../utils/bcrypt.ts'
 import { jwtService } from '../utils/jwt.ts'
 import { User } from '../types/user.type.ts'
 import { LoginUser } from '../schemas/auth/login-user.schema.ts'
+import { AppError } from '../errors/AppError.ts'
 
 class AuthService {
     constructor(
@@ -22,6 +23,10 @@ class AuthService {
 
         const user: User = await this.repository.create(registerUser)
 
+        if (!user) {
+            throw new AppError('Oops... something went wrong', 500)
+        }
+
         const payload = {
             sub: user.id,
         }
@@ -34,17 +39,17 @@ class AuthService {
     async login(loginUser: LoginUser) {
         const user: User = await this.repository.findByEmail(loginUser.email)
 
-        const isMatch = this.bcrypt.compare(
+        if (!user) {
+            throw new AppError('Oops... something went wrong', 500)
+        }
+
+        const isMatch = await this.bcrypt.compare(
             loginUser.password,
-            loginUser.password,
+            user.password,
         )
 
         if (!isMatch) {
-            return {
-                token: null,
-                user: null,
-                message: 'Fail',
-            }
+            throw new AppError('Oops... something went wrong', 401)
         }
 
         const payload = {

@@ -1,4 +1,4 @@
-import pool from '../database/index.ts'
+import pool from '../db/index.ts'
 import { CreateTask } from '../schemas/task/create-task.schema.ts'
 import { DeleteTask } from '../schemas/task/delete-task.schema.ts'
 import { IdTask } from '../schemas/task/id-task.schema.ts'

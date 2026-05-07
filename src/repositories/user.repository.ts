@@ -1,4 +1,4 @@
-import pool from '../database/index.ts'
+import pool from '../db/index.ts'
 import { RegisterUser } from '../schemas/auth/register-user.schema.ts'
 import { IdUser } from '../schemas/user/id-user.schema.ts'
 import { UpdateUser } from '../schemas/user/update-user.schema.ts'
