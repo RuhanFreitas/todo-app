@@ -2,20 +2,17 @@ import './db/index.ts'
 import 'dotenv/config'
 import 'reflect-metadata'
 
-import express from 'express'
+import express, { Request, Response } from 'express'
 import userRouter from './routes/user.routes.ts'
 import taskRouter from './routes/task.routes.ts'
 import cookieParser from 'cookie-parser'
 
-import { connectDB } from './db/index.ts'
 import { authRouter } from './routes/auth.routes.ts'
 import { errorMiddleware } from './middlewares/error.middleware.ts'
 
-await connectDB()
-
 const app = express()
 
-app.use(cookieParser())
+app.use(cookieParser(process.env.SECRET))
 app.use(express.json())
 
 app.use('/user', userRouter)

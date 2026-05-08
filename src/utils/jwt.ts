@@ -1,20 +1,10 @@
 import 'dotenv/config'
 import jwt from 'jsonwebtoken'
-import { AppError } from '../errors/AppError.ts'
 
 class JwtService {
-    private readonly SECRET: string | any
+    private readonly SECRET: string | any = process.env.SECRET
 
-    constructor() {
-        this.SECRET = process.env.SECRET
-
-        if (!this.SECRET) {
-            throw new AppError(
-                'Some important key is missing from the production environment...',
-                500,
-            )
-        }
-    }
+    constructor() {}
 
     sign(payload: any) {
         return jwt.sign({ data: payload }, this.SECRET, { expiresIn: '2h' })

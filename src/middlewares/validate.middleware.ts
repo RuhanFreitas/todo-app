@@ -21,6 +21,6 @@ export const validate =
                     })),
                 })
             }
-            return res.status(500).json({ message: 'Erro interno' })
+            return res.status(500).json({ message: 'Internal error' })
         }
     }

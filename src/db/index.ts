@@ -12,9 +12,8 @@ const pool = new Pool({
     maxLifetimeSeconds: 60,
 })
 
-export const connectDB = async () => {
-    try {
-        await pool.query(`
+try {
+    await pool.query(`
         DO $$ 
         BEGIN
           IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_status') THEN
@@ -23,7 +22,7 @@ export const connectDB = async () => {
         END $$;
     `)
 
-        await pool.query(`
+    await pool.query(`
     CREATE TABLE IF NOT EXISTS users(
         id SERIAL PRIMARY KEY,
         name VARCHAR(80) NOT NULL,
@@ -34,10 +33,10 @@ export const connectDB = async () => {
     )  
 `)
 
-        await pool.query(`
+    await pool.query(`
     CREATE TABLE IF NOT EXISTS tasks(
         id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id),
+        user_id INT REFERENCES users(id) ON DELETE CASCADE,
         title VARCHAR(80) NOT NULL,
         description TEXT NOT NULL,
         status task_status DEFAULT 'PENDING',
@@ -45,14 +44,13 @@ export const connectDB = async () => {
         updated_at TIMESTAMPTZ default CURRENT_TIMESTAMP
     )
 `)
-        console.log('Tables create successfully')
-    } catch (error) {
-        console.error(error)
-    }
-
     pool.on('error', (e) => {
         console.error('Ops... Something is wrong ', e)
     })
+
+    console.log('Tables create successfully')
+} catch (error) {
+    console.error(error)
 }
 
 export default pool

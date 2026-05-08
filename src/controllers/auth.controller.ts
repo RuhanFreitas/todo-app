@@ -11,6 +11,7 @@ class AuthController {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
+            signed: true,
             maxAge: 7200000,
         })
 
@@ -26,6 +27,7 @@ class AuthController {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
+            signed: true,
             maxAge: 7200000,
         })
 

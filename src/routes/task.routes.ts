@@ -7,25 +7,26 @@ import { UserIdSchema } from "../schemas/task/user-id.schema.ts";
 import { UpdateTaskStatusSchema } from "../schemas/task/update-task-status.schema.ts";
 import { UpdateTaskSchema } from "../schemas/task/update-task.schema.ts";
 import { DeleteTaskSchema } from "../schemas/task/delete-task.schema.ts";
+import { authorizationMiddleware } from "../middlewares/authorization.middleware.ts";
 
 const taskRouter = Router()
 
 // Create task
-taskRouter.post('/', validate(CreateTaskSchema), (req, res) => taskController.create(req, res))
+taskRouter.post('/', authorizationMiddleware, validate(CreateTaskSchema), (req, res) => taskController.create(req, res))
 
 // Find tasks by id
-taskRouter.get('/', validate(IdTaskSchema), (req, res) => taskController.findById(req, res))
+taskRouter.get('/', authorizationMiddleware, validate(IdTaskSchema), (req, res) => taskController.findById(req, res))
 
 // Find all tasks by user id
-taskRouter.get('/all', validate(UserIdSchema), (req, res) => taskController.findAll(req, res))
+taskRouter.get('/all', authorizationMiddleware, validate(UserIdSchema), (req, res) => taskController.findAll(req, res))
 
 // Update task Status by id
-taskRouter.patch('/update-status', validate(UpdateTaskStatusSchema) ,(req, res) => taskController.updateStatus(req, res))
+taskRouter.patch('/update-status', authorizationMiddleware, validate(UpdateTaskStatusSchema) ,(req, res) => taskController.updateStatus(req, res))
 
 // Update task information by id
-taskRouter.patch('/update', validate(UpdateTaskSchema), (req, res) => taskController.updateById(req, res))
+taskRouter.patch('/update', authorizationMiddleware, validate(UpdateTaskSchema), (req, res) => taskController.updateById(req, res))
 
 // Delete task by id
-taskRouter.delete('/', validate(DeleteTaskSchema), (req, res) => taskController.delete(req, res))
+taskRouter.delete('/', authorizationMiddleware, validate(DeleteTaskSchema), (req, res) => taskController.delete(req, res))
 
 export default taskRouter
