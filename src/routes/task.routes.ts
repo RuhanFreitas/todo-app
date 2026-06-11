@@ -30,3 +30,4 @@ taskRouter.patch('/update', authorizationMiddleware, validate(UpdateTaskSchema),
 taskRouter.delete('/', authorizationMiddleware, validate(DeleteTaskSchema), (req, res) => taskController.delete(req, res))
 
 export default taskRouter
+
