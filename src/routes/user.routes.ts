@@ -17,3 +17,5 @@ userRouter.patch('/', authorizationMiddleware, validate(UpdateUserSchema), (req,
 userRouter.delete('/', authorizationMiddleware, validate(IdUserSchema), (req, res) => userController.delete(req, res))
 
 export default userRouter
+
+
