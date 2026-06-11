@@ -11,3 +11,4 @@ authRouter.post('/register', validate(RegisterUserSchema), (req, res) => authCon
 
 // Login user
 authRouter.post('/login', validate(LoginUserSchema), (req, res) => authController.login(req, res))
+
