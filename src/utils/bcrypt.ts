@@ -14,4 +14,3 @@ class BycrptHash {
 
 export const bcryptHash = new BycrptHash()
 
-
