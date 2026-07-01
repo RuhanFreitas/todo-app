@@ -8,3 +8,6 @@ export const LoginUserSchema = z.object({
 })
 
 export type LoginUser = z.infer<typeof LoginUserSchema>['body']
+
+
+
