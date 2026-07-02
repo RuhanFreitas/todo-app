@@ -247,5 +247,3 @@ docker compose up
 
 ```
 
-
-
